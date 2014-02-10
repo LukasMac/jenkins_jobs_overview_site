@@ -1,0 +1,32 @@
+<table>
+  <tbody>
+  <% @job_list.each do |job| %>
+    <tr>
+        <td class="job-status <%= job['color'] %>"></td>
+        <td><%= link_to job['name'], job['url'] %></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+      <td colspan="4" class='job-builds'>
+        <table class="builds">
+          <% get_job_builds(@client, job['name']).each_with_index do |build, index| %>
+            <tr>
+              <td class="<%= build_color(@client, job, build) %>-small"></td>
+              <td><%= link_to "\##{build['number']} console output", "#{build['url']}/console" %></td>
+            </tr>
+            <% if index == 0 %>
+              <tr>
+                <td colspan="2">
+                  <textarea class="console-output"><%= get_console_output(@client, job, build) %></pre>
+                  </textarea>
+                </td>
+              </tr>
+            <% end %>
+          <% end %>
+        </table>
+      </td>
+    <tr>
+  <% end %>
+  </tbody>
+</table>
